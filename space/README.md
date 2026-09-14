@@ -1,6 +1,12 @@
-# gTTS-voices benchmark (GhanaNLP / ghananlpcommunity)
-
-Who is the best Google Text-to-Speech voice at reading Ghanaian languages?
+---
+title: "gTTS-voices × Ghanaian languages"
+emoji: 🎙️
+colorFrom: green
+colorTo: indigo
+sdk: static
+pinned: false
+sdk_version: "1.0"
+---
 
 Every gTTS voice (all 69 supported by the library) is asked to read 200
 sentences in each of the 12 Ghanaian languages.  Before synthesis each
