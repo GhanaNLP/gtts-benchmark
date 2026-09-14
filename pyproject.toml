@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gtts-benchmark"
+version = "0.1.0"
+description = "Benchmarking Google Text-to-Speech across 69 languages with africa-g2p universal grapheme normalization"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+dependencies = [
+    "gtts>=2.5.0",
+    "africa-g2p>=0.2.0",
+    "openai-whisper>=20231117",
+    "datasets>=2.14.0",
+    "pyyaml>=6.0",
+    "soundfile>=0.12.0",
+    "numpy>=1.24.0",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+gtts-benchmark = "benchmark.pipeline:main"

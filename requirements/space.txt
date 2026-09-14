@@ -1,0 +1,7 @@
+# Deploying the results space
+#   pip install huggingface_hub
+#   python -c "from huggingface_hub import create_repo, upload_folder; \
+#              create_repo('GhanaOpenAI/gtts-benchmark', repo_type='space', space_sdk='static', exist_ok=True); \
+#              upload_folder(repo_id='GhanaOpenAI/gtts-benchmark', repo_type='space', folder_path='space')"
+# Push synthesised audio for the demo clips:
+#   python scripts/push_audio.py

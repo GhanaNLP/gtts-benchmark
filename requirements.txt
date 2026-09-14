@@ -1,0 +1,15 @@
+gtts>=2.5.0
+africa-g2p>=0.2.0
+datasets>=2.14.0
+pyyaml>=6.0
+soundfile>=0.12.0
+numpy>=1.24.0
+tqdm>=4.65.0
+requests>=2.28.0
+
+# ASR judges (per-language). The heavy ones (omniasr, griot) need torch:
+# pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu128
+# and their own packages (see nsanku-tts-benchmark docker/requirements).
+# Khaya judge: REST API, no extra install (needs KHAYA_API_KEY).
+huggingface_hub>=0.23.0
+safetensors>=0.4.0

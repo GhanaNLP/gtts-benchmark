@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Which Google Text-to-Speech (gTTS) voice reads Ghanaian languages best? Every gTTS voice reads 200 sentences per Ghanaian language, converted to africa-g2p universal graphemes, scored by ASR character error rate.">
+<title>gTTS-voices x Ghanaian Languages — benchmark</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #2ea043; --accent-soft: #d4f5dd; --accent-hi: #eefbf1;
+  --link: #0b6e1f; --bg: #ffffff; --surface-2: #f6f8fa;
+  --neutral-100: #f3f4f6; --border: #e2e8f0; --border-strong: #cbd5e1;
+  --text: #1f2937; --text-strong: #111827; --text-muted: #6b7280;
+  --danger: #b91c1c; --danger-bg: #fee2e2; --warning: #b45309; --warning-bg: #fef3c7;
+  --radius: 8px; --shadow: 0 1px 2px rgba(16,24,40,.05);
+}
+html { font-size: 15px; }
+body { font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 20px 72px; }
+.site-head { display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px; padding: 18px 0 12px; margin-bottom: 18px;
+  border-bottom: 1px solid var(--border); }
+.site-head h1 { font-size: 1.3rem; font-weight: 700; color: var(--text-strong); }
+.site-head .tagline { color: var(--text-muted); font-size: .88rem; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow); }
+.stat-card .label { color: var(--text-muted); font-size: .76rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.stat-card .value { font-size: 1.4rem; font-weight: 700; color: var(--text-strong); }
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border); }
+.tab { padding: 9px 18px; cursor: pointer; border: 1px solid transparent;
+  background: transparent; color: var(--text-muted); font-weight: 600;
+  font-size: .9rem; border-radius: var(--radius) var(--radius) 0 0; }
+.tab:hover { color: var(--text-strong); background: var(--accent-hi); }
+.tab.active { background: var(--surface-2); color: var(--text-strong);
+  border-color: var(--border); border-bottom: 2px solid var(--accent); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.filters { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.filters label { color: var(--text-muted); font-size: .85rem; font-weight: 600; }
+.filters select, .filters input {
+  background: var(--bg); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 7px 11px; border-radius: 6px; font-size: .9rem; min-width: 140px; font-family: inherit; }
+.filters input[type=text] { min-width: 220px; }
+.table-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: auto; box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--border);
+  text-align: left; white-space: nowrap; }
+th { background: var(--surface-2); color: var(--text-muted); font-size: .78rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+  position: sticky; top: 0; z-index: 1; }
+tbody tr:hover { background: var(--accent-hi); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .76rem;
+  font-weight: 700; color: #fff; }
+.badge.good { background: var(--accent); }
+.badge.ok { background: var(--warning); }
+.badge.bad { background: var(--danger); }
+.small { color: var(--text-muted); font-size: .8rem; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+audio { height: 28px; }
+.heat { color: var(--text-strong); font-weight: 600; text-align: right;
+  font-variant-numeric: tabular-nums; border-radius: 4px; padding: 4px 6px; }
+.heat.na { color: var(--text-muted); font-weight: 400; }
+.matrix-scroll { max-height: 70vh; overflow: auto; }
+.cell-note { color: var(--text-muted); font-size: .76rem; }
+.loading, .error { padding: 40px; text-align: center; color: var(--text-muted); }
+.error { color: var(--danger); }
+.rowlink { cursor: pointer; }
+.rowlink:hover td { background: var(--accent-hi); }
+footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--border);
+  color: var(--text-muted); font-size: .8rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="site-head">
+    <div>
+      <h1>gTTS × Ghanaian Languages — Voice Benchmark</h1>
+      <div class="tagline">Which free Google Text-to-Speech voice reads Ghanaian languages best?
+      Every gTTS voice reads 200 sentences per language via <b>africa-g2p universal graphemes</b>,
+      judged by ASR <b>CER</b> (lower is better).</div>
+    </div>
+    <div class="small">updated <span id="updatedAt">—</span></div>
+  </div>
+
+  <div class="stats-grid" id="stats"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="global">Voice leaderboard</div>
+    <div class="tab" data-tab="lang">Per language</div>
+    <div class="tab" data-tab="matrix">Matrix</div>
+    <div class="tab" data-tab="voice">Voice detail</div>
+  </div>
+
+  <div id="pane-global" class="tab-pane active">
+    <div class="filters">
+      <label>Search voice</label>
+      <input type="text" id="globalSearch" placeholder="code or name, e.g. sw / Hausa">
+    </div>
+    <div class="table-wrap" id="globalTable"></div>
+  </div>
+
+  <div id="pane-lang" class="tab-pane">
+    <div class="filters">
+      <label>Language</label>
+      <select id="langSelect"></select>
+      <span class="small" id="langNote"></span>
+    </div>
+    <div class="table-wrap" id="langTable"></div>
+  </div>
+
+  <div id="pane-matrix" class="tab-pane">
+    <div class="filters">
+      <span class="small">Cells show CER. Click a row to swap it into the voice-detail tab.</span>
+    </div>
+    <div class="matrix-scroll table-wrap" id="matrixTable"></div>
+  </div>
+
+  <div id="pane-voice" class="tab-pane">
+    <div class="filters">
+      <label>Voice</label>
+      <select id="voiceSelect"></select>
+      <span class="small" id="voiceNote"></span>
+    </div>
+    <div class="table-wrap" id="voiceTable"></div>
+  </div>
+
+  <footer>
+    <b>Method.</b> 200 sentences per Ghanaian language from
+    <a href="https://huggingface.co/datasets/ghanaopenai/ghana-sentences">ghana-sentences</a>,
+    converted to universal graphemes with
+    <a href="https://github.com/AfriSpeech/africa-g2p">africa-g2p</a>, synthesised by every
+    <a href="https://github.com/pndurette/gTTS">gTTS</a> voice, transcribed by the best
+    ASR judge per language (Khaya / omniASR / griot — same judges as
+    <a href="https://huggingface.co/spaces/ghananlpcommunity/nsanku-tts-benchmark">nsanku</a>),
+    scored as character error rate. Source: <a href="https://github.com/GhanaOpenAI/gtts-benchmark">github.com/GhanaOpenAI/gtts-benchmark</a>.
+  </footer>
+</div>
+
+<script>
+const GITHUB_URL = "https://raw.githubusercontent.com/GhanaOpenAI/gtts-benchmark/main";
+const AUDIO_BASE = "https://huggingface.co/datasets/GhanaOpenAI/gtts-benchmark-audio/resolve/main/audio";
+
+const LANGS = [
+  ["ada","Dangme"], ["dag","Dagbani"], ["dga","Dagaare"], ["ewe","Ewe"],
+  ["fat","Fante"], ["gaa","Ga"], ["gjn","Gonja"], ["gur","Gurene"],
+  ["nzi","Nzema"], ["twi_akuapem","Akuapem Twi"], ["twi_asante","Asante Twi"],
+  ["xsm","Kasem"],
+];
+const LANG_NAME = Object.fromEntries(LANGS);
+
+let DATA = null;          // voice_matrix.json
+let LANG_YAML = {};       // iso -> yaml
+let VOICE_YAML = {};      // voice -> yaml
+
+async function loadAll() {
+  const [matrix, ...langDocs] = await Promise.all([
+    fetch(`${GITHUB_URL}/benchmarks/voice_matrix.json`).then(r => r.json()),
+    ...LANGS.map(([iso]) =>
+      fetch(`${GITHUB_URL}/benchmarks/${iso}.yaml`)
+        .then(r => r.ok ? r.text() : Promise.resolve("")).catch(() => ""))
+  ]);
+  DATA = matrix;
+  LANGS.forEach(([iso], i) => { if (langDocs[i]) LANG_YAML[iso] = parseBenchYaml(langDocs[i]); });
+  document.getElementById("updatedAt").textContent = matrix.updated || "—";
+  renderStats();
+  populateSelects();
+  renderGlobal();
+  renderLang();
+  renderMatrix();
+  renderVoiceDetail();
+}
+
+function parseBenchYaml(text) {
+  try { return parseYaml(text); } catch (e) { console.error(e); return null; }
+}
+
+function renderStats() {
+  const voices = DATA.voices.length;
+  const withData = Object.entries(DATA.voice_avg_cer).filter(([,v]) => v != null);
+  const best = withData.sort((a,b) => a[1]-b[1])[0];
+  const cells = Object.values(DATA.matrix).reduce((n, row) =>
+    n + Object.values(row).filter(v => v != null).length, 0);
+  const clips = cells * (DATA.num_samples || 200);
+  const stats = document.getElementById("stats");
+  stats.innerHTML = [
+    card("Voices", voices, "gTTS voices evaluated"),
+    card("Languages", DATA.languages.length, "Ghanaian languages"),
+    card("Samples/language", DATA.num_samples || 200, "from ghana-sentences"),
+    card("Clips scored", clips.toLocaleString(), `${cells} cells finished`),
+    card("Best voice", best ? `${h(best[0])} · ${best[1].toFixed(3)}` : "—",
+         best ? "lowest mean CER" : "no scores yet"),
+  ].join("");
+}
+function card(label, value, note) {
+  return `<div class="stat-card"><div class="label">${label}</div>
+    <div class="value">${value}</div><div class="small">${note}</div></div>`;
+}
+
+function populateSelects() {
+  const ls = document.getElementById("langSelect");
+  ls.innerHTML = LANGS.map(([iso]) =>
+    `<option value="${iso}">${LANG_NAME[iso]} (${iso})</option>`).join("");
+  const vs = document.getElementById("voiceSelect");
+  vs.innerHTML = DATA.voices.map(v =>
+    `<option value="${v}">${v} — ${voiceName(v)}</option>`).join("");
+}
+
+function voiceName(v) { return v; }
+
+function cerBadge(cer) {
+  if (cer == null) return `<span class="small">—</span>`;
+  const cls = cer < 0.15 ? "good" : cer < 0.30 ? "ok" : "bad";
+  const perc = (cer * 100).toFixed(1) + "%";
+  return `<span class="badge ${cls}">${perc}</span>`;
+}
+
+function audioTag(iso, voice) {
+  const clip = DATA.clips && DATA.clips[voice] && DATA.clips[voice][iso];
+  if (clip == null) return `<span class="small">—</span>`;
+  const url = `${AUDIO_BASE}/${iso}/${voice}/${String(clip).padStart(5,"0")}.wav`;
+  return `<audio controls preload="none" src="${url}" title="${voice} -> ${iso} #${clip}"></audio>`;
+}
+
+// ── Tab 1: Global voice leaderboard ────────────────────────────────────────
+function renderGlobal() {
+  const q = (document.getElementById("globalSearch").value || "").toLowerCase();
+  const rows = Object.entries(DATA.matrix).filter(([v]) =>
+    !q || v.toLowerCase().includes(q) || v.toLowerCase().includes(q));
+  rows.sort((a,b) => (DATA.voice_avg_cer[a[0]] ?? 1e9) - (DATA.voice_avg_cer[b[0]] ?? 1e9));
+  const thead = `<tr><th>#</th><th>Voice</th><th class="num">Mean CER</th>
+    <th>${LANGS.map(([iso]) => `<span title="${iso}">${short(iso)}</span>`).join("</th><th>")}</th><th>Demo</th></tr>` +
+    `<tr class="cell-note"><td></td><td></td><td></td>
+     <td colspan="${LANGS.length}">per-language CER</td><td></td></tr>`;
+  const tbody = rows.map(([v, row], i) => {
+    const avg = DATA.voice_avg_cer[v];
+    const bestCell = LANGS.map(([iso, name]) => ({iso, name, cer: row[iso]}))
+      .filter(c => c.cer != null)
+      .sort((a,b) => a.cer - b.cer)[0];
+    const demo = bestCell ? `${bestCell.iso} <span class="small">(${bestCell.cer.toFixed(2)})</span> ${audioTag(bestCell.iso, v)}` : `<span class="small">—</span>`;
+    return `<tr class="rowlink" onclick="openVoice('${v}')">
+      <td>${i+1}</td>
+      <td><b class="mono">${h(v)}</b></td>
+      <td class="num">${avg != null ? avg.toFixed(3) : "—"}</td>
+      <td class="num">${LANGS.map(([iso]) => {
+        const c = row[iso];
+        return `<span title="${LANG_NAME[iso]}">${c == null ? "—" : c.toFixed(2)}</span>`;
+      }).join("</td><td class=\"num\">")}</td>
+      <td>${demo}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("globalTable").innerHTML =
+    `<table><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+}
+
+function short(iso) {
+  return iso.replace("twi_", "tw-").replace("akuapem","aku").replace("asante","asa")
+            .replace("_", "");
+}
+
+// ── Tab 2: Per-language ────────────────────────────────────────────────────
+function renderLang() {
+  const iso = document.getElementById("langSelect").value;
+  const y = LANG_YAML[iso];
+  const note = document.getElementById("langNote");
+  if (!y) {
+    note.textContent = "no results yet";
+    document.getElementById("langTable").innerHTML = "";
+    return;
+  }
+  note.textContent = `judge: ${(y.judge && y.judge.model) || "—"} · judge CER on real speech: ${y.judge && y.judge.cer_on_real_speech != null ? y.judge.cer_on_real_speech : "—"}`;
+  const rows = y.benchmarks.map((b, i) => {
+    const clip = audioTag(iso, b.model);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><b class="mono">${h(b.model)}</b></td>
+      <td class="num">${b.cer != null ? b.cer.toFixed(3) : "—"}</td>
+      <td class="num">${b.wer != null ? b.wer.toFixed(3) : "—"}</td>
+      <td class="num">${b.valid ?? "—"}/${b.samples ?? "—"}</td>
+      <td>${clip}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("langTable").innerHTML =
+    `<table><thead><tr><th>#</th><th>Voice</th><th class="num">CER</th>
+      <th class="num">WER</th><th class="num">Valid</th><th>Demo clip</th></tr></thead>
+     <tbody>${rows}</tbody></table>`;
+}
+
+// ── Tab 3: Matrix heatmap ──────────────────────────────────────────────────
+function renderMatrix() {
+  const isos = DATA.languages;
+  const voices = DATA.voices.slice().sort(
+    (a,b) => (DATA.voice_avg_cer[a] ?? 1e9) - (DATA.voice_avg_cer[b] ?? 1e9));
+  const head = `<th>Voice</th><th class="num">Mean</th>
+    ${isos.map(i => `<th class="num" title="${LANG_NAME[i]}">${short(i)}</th>`).join("")}`;
+  const body = voices.map(v => {
+    const avg = DATA.voice_avg_cer[v];
+    const cells = isos.map(iso => {
+      const c = DATA.matrix[v][iso];
+      if (c == null) return `<td class="heat na">—</td>`;
+      const color = c < 0.15 ? "rgba(46,160,67,.25)"
+        : c < 0.30 ? "rgba(180,83,9,.25)" : "rgba(185,28,28,.25)";
+      return `<td class="heat" style="background:${color}" title="${v} -> ${iso}">${c.toFixed(3)}</td>`;
+    }).join("");
+    return `<tr class="rowlink" onclick="openVoice('${v}')">
+      <td><b class="mono">${h(v)}</b></td>
+      <td class="num">${avg != null ? avg.toFixed(3) : "—"}</td>${cells}</tr>`;
+  }).join("");
+  document.getElementById("matrixTable").innerHTML =
+    `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+// ── Tab 4: Voice detail ────────────────────────────────────────────────────
+async function openVoice(v) {
+  const sel = document.getElementById("voiceSelect");
+  sel.value = v;
+  activateTab("voice");
+  renderVoiceDetail();
+}
+
+async function renderVoiceDetail() {
+  const v = document.getElementById("voiceSelect").value;
+  const note = document.getElementById("voiceNote");
+  if (!VOICE_YAML[v] && !(v in VOICE_YAML)) {
+    VOICE_YAML[v] = await fetch(`${GITHUB_URL}/benchmarks/voice/${v}.yaml`)
+      .then(r => r.ok ? r.text() : "").catch(() => "");
+  }
+  const perLang = VOICE_YAML[v] ? (() => { try { return parseYaml(VOICE_YAML[v]); } catch (e) { return null; } })() : null;
+  note.textContent = perLang && perLang.languages
+    ? `${perLang.languages.length} languages scored` : "uses the matrix below";
+  const rows = LANGS.map(([iso, name]) => {
+    const c = DATA.matrix[v] && DATA.matrix[v][iso];
+    return `<tr>
+      <td><b>${name}</b> <span class="small mono">(${iso})</span></td>
+      <td class="num">${c != null ? c.toFixed(3) : "—"}</td>
+      <td>${audioTag(iso, v)}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("voiceTable").innerHTML =
+    `<table><thead><tr><th>${h(v)} — voice reads</th><th class="num">CER</th>
+      <th>Demo clip</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+window.addEventListener("load", () => loadAll().catch(e => {
+  document.getElementById("globalTable").innerHTML =
+    `<div class="error">Could not load benchmark data: ${h(e.message)}.
+    Have the first runs been pushed? Results are read from the GitHub repo.</div>`;
+}));
+
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  activateTab(t.dataset.tab);
+}));
+function activateTab(name) {
+  document.querySelectorAll(".tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tab === name));
+  document.querySelectorAll(".tab-pane").forEach(p =>
+    p.classList.toggle("active", p.id === "pane-" + name));
+}
+document.getElementById("globalSearch").addEventListener("input", renderGlobal);
+document.getElementById("langSelect").addEventListener("change", renderLang);
+document.getElementById("voiceSelect").addEventListener("change", renderVoiceDetail);
+
+function h(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// ── Minimal YAML (subset used in this repo's benchmarks + matrix) ─────────
+function parseYaml(text) {
+  const lines = text.split("\n");
+  const obj = {};
+  let key, list = null, listItem = null;
+  for (const raw of lines) {
+    if (!raw.trim() || raw.trim().startsWith("#")) continue;
+    const line = stripComment(raw).replace(/\s+$/,"");
+    const isComment = !line.trim();
+    if (isComment) continue;
+    if (/^sample_clips:$/.test(line)) { key="sample_clips"; list=null; continue; }
+    if (/^benchmarks:$/.test(line)) { key="benchmarks"; list=obj.benchmarks=[]; continue; }
+    const listMatch = line.match(/^  - \s*(\w+):\s*(.*)$/);
+    if (listMatch) {
+      listItem = {};
+      listItem[listMatch[1]] = scalar(listMatch[2]);
+      list.push(listItem);
+      continue;
+    }
+    if (list && listItem && /^    (\w+):\s*(.*)$/.test(line)) {
+      const m = line.match(/^    (\w+):\s*(.*)$/);
+      listItem[m[1]] = scalar(m[2]);
+      continue;
+    }
+    const m = line.match(/^(\w+):\s*(.*)$/);
+    if (m) { obj[m[1]] = scalar(m[2]); continue; }
+    const m2 = line.match(/^(\w+):\s*$/);
+    if (m2) { key = m2[1]; continue; }
+    if (key && line.startsWith("  ") && /^\d+$/.test(line.trim())) { continue; }
+  }
+  return obj;
+}
+function stripComment(line) {
+  const i = line.indexOf("#");
+  return i === 0 ? "#" : i > 0 ? line.slice(0, i) : line;
+}
+function scalar(s) {
+  s = s.trim();
+  if (s === "null" || s === "~" || s === "") return null;
+  if (/^-?\d+(\.\d+)?$/.test(s)) return Number(s);
+  return s.replace(/^["']|["']$/g, "");
+}
+</script>
+</body>
+</html>
