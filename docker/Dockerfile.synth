@@ -1,0 +1,26 @@
+# Synthesis environment for the gTTS-voices benchmark.
+#
+# gTTS is pure HTTP (no GPU, no ffmpeg), so this is a tiny image compared to
+# nsanku's TTS stack — just the library and the africa-g2p converter, plus
+# datasets to read the ghana-sentences pools and huggingface_hub to push clips
+# back to the audio dataset repo.
+#
+# Built and published by GhanaOpenAI/gtts-benchmark-images.
+FROM python:3.12-slim
+
+# africa-g2p from git: PyPI 0.1.0 predates the universal GraphemeConverter.
+RUN pip install --no-cache-dir \
+    "gTTS>=2.5.0" \
+    "africa-g2p @ git+https://github.com/AfriSpeech/africa-g2p.git" \
+    "datasets>=2.14.0" \
+    "pyyaml>=6.0" \
+    "tqdm>=4.65.0" \
+    "requests>=2.28.0" \
+    "soundfile>=0.12.0" \
+    "numpy>=1.24.0" \
+    "huggingface_hub>=0.23.0"
+
+# The container's locale is POSIX, which makes Python default to ascii for
+# text IO and breaks reading the Twi/Ewe results.
+ENV PYTHONUTF8=1 LANG=C.UTF-8 LC_ALL=C.UTF-8
+WORKDIR /app

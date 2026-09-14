@@ -1,4 +1,4 @@
-"""Push synthesised audio to GhanaOpenAI/gtts-benchmark-audio.
+"""Push synthesised audio to ghananlpcommunity/gtts-benchmark-audio.
 
 Uploads the whole ``audio/`` tree to a dataset repo so the HF Space can stream
 demo clips.  Idempotent: huggingface_hub skips unchanged files when you pass
@@ -6,7 +6,7 @@ demo clips.  Idempotent: huggingface_hub skips unchanged files when you pass
 
 Usage:
     python scripts/push_audio.py            # upload everything
-    python scripts/push_audio.py --repo GhanaOpenAI/gtts-benchmark-audio
+    python scripts/push_audio.py --repo ghananlpcommunity/gtts-benchmark-audio
 """
 
 import argparse
@@ -17,7 +17,7 @@ ROOT = Path(__file__).parent.parent
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--repo", default="GhanaOpenAI/gtts-benchmark-audio")
+    ap.add_argument("--repo", default="ghananlpcommunity/gtts-benchmark-audio")
     ap.add_argument("--audio-dir", default=str(ROOT / "audio"))
     ap.add_argument("--token", default=None)
     args = ap.parse_args()

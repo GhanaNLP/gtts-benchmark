@@ -1,4 +1,4 @@
-# gTTS-voices benchmark (Ghana Open AI)
+# gTTS-voices benchmark (GhanaNLP / ghananlpcommunity)
 
 Who is the best Google Text-to-Speech voice at reading Ghanaian languages?
 
@@ -12,3 +12,12 @@ spelling.  The clips are then transcribed by the best ASR judge per language
 
 The result answers a practical question for low-resource speech work: **which
 free Google voice should you route Ghanaian text through?**
+
+## Data flow
+
+- **Results** are read from `benchmarks/` on
+  [Github.com/GhanaNLP/gtts-benchmark](https://github.com/GhanaNLP/gtts-benchmark)
+  (assembled from HF Job results by `scripts/assemble_benchmarks.py`).
+- **Demo clips** stream from the
+  `ghananlpcommunity/gtts-benchmark-audio` dataset repo, at
+  `audio/{iso}/{voice}/{idx:05d}.wav`.

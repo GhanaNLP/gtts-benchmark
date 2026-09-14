@@ -16,76 +16,86 @@ grab the closest voice and hope. This benchmark measures that systematically.
    to the *universal grapheme set*: the shared majority African orthography. Every voice then
    attempts the same, identical spelling, so scores across voices are comparable.
 3. **Synthesis** — all 69 gTTS voices (the full `gtts.lang.tts_langs()` set) read every pool,
-   concurrently (gTTS is network-bound; default 8 in flight).
+   concurrently (gTTS is network-bound; default 24 in flight).
 4. **Scoring** — the best ASR judge per language (Khaya / omniASR / griot — the same judges as
-   [nsanku-tts-benchmark](https://github.com/GhanaOpenAI/nsanku-tts-benchmark)) transcribes every
+   [nsanku-tts-benchmark](https://github.com/GhanaNLP/nsanku-tts-benchmark)) transcribes every
    clip; each is scored as **CER** (and WER) against the *original* sentence. Lower is better.
 
 The matrix is **69 voices × 12 languages × 200 samples**. Each cell is independently
-incremental: re-running only synthesises/scores what is not already on disk.
+incremental: re-running only synthesises/scores what is not already present.
 
-## Install
+## How the run is orchestrated (HuggingFace Jobs)
+
+Like `nsanku-tts-benchmark`, synthesis and scoring run as **HuggingFace Jobs** under the
+`ghananlpcommunity` namespace:
+
+- **One synthesis job per language** — pulls existing clips for that language from the
+  `ghananlpcommunity/gtts-benchmark-audio` dataset repo, synthesises all 69 voices, pushes
+  clips back (resumable).
+- **One scoring job per language** — pulls every voice's clips + existing transcriptions,
+  transcribes all 69 voices with that language's judge, pushes `transcriptions/` and
+  `results/{iso}.json`.
+- Jobs are independent containers: a failure costs one unit, and the run survives this
+  machine being closed. A job needs only an HF token (`HF_TOKEN`) and `KHAYA_API_KEY` for the
+  Khaya-judged languages.
+- **Images:** scoring reuses `ghcr.io/ghanaopenai/nsanku-tts-benchmark:asr` (identical judges)
+  verbatim. Synthesis uses a tiny image, `ghcr.io/ghanaopenai/gtts-benchmark:synth`, built by
+  [`GhanaOpenAI/gtts-benchmark-images`](https://github.com/GhanaOpenAI/gtts-benchmark-images)
+  from `docker/Dockerfile.synth`.
+
+### Submit the jobs
+
+```bash
+export HF_TOKEN=hf_...          # write access to ghananlpcommunity org (jobs + audio repo)
+export KHAYA_API_KEY=...        # required for ada/dag/dga/fat/gjn/xsm scoring
+
+python scripts/run_hf_jobs.py --stage synth --dry-run     # preview
+python scripts/run_hf_jobs.py --stage synth               # 12 jobs
+python scripts/run_hf_jobs.py --stage score --langs ewe,twi_asante
+python scripts/run_hf_jobs.py --stage score               # 12 jobs
+```
+
+### Assemble and publish results
+
+```bash
+python scripts/assemble_benchmarks.py    # pulls results/*.json -> benchmarks/*
+git add benchmarks && git commit -m "results" && git push
+```
+
+The HF Space reads `benchmarks/*.{yaml,json}` from this repo and the demo clips from the
+audio dataset repo, so pushing the repo updates the leaderboard.
+
+## Run a quick local smoke test
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -e .                     # or: pip install -r requirements.txt
-pip install africa-g2p==0.2.0        # >=0.2.0 needed for the universal converter
+pip install -e . python -m pip install "africa-g2p @ git+https://github.com/AfriSpeech/africa-g2p.git"
+python pipeline.py --voices en sw --langs twi_asante --limit 3     # synth only, 3 samples
 ```
 
-For the heavy ASR judges (omniasr → ewe/gur/nzi, griot → gaa/twi) install their
-dependencies on a GPU box (see `nsanku-tts-benchmark/docker/`).
-
-## Run
-
-```bash
-# Full matrix: 69 voices x 12 languages
-python pipeline.py
-
-# Smoke test (2 voices, 1 language, 3 samples)
-python pipeline.py --voices en sw --langs twi_asante --limit 3
-
-# Synthesis only / scoring only / re-run
-python pipeline.py --stage synth
-python pipeline.py --stage score
-python pipeline.py --force
-
-# Tuning
-python pipeline.py --concurrency 16          # gTTS requests in flight
-GTTS_NUM_SAMPLES=500 python pipeline.py      # grow to 500 samples incrementally
-```
-
-### Env vars
-
-| var | default | meaning |
-|---|---|---|
-| `GTTS_NUM_SAMPLES` | 200 | samples per language (`--limit` overrides for testing) |
-| `GTTS_CONCURRENCY` | 8 | concurrent gTTS requests |
-| `GTTS_TLD` | com | Google TLD (useful if `com` is blocked) |
-| `GTTS_UNIVERSAL` | 1 | set `0` to skip africa-g2p conversion (baseline) |
-| `KHAYA_API_KEY` | — | required for the Khaya ASR judge |
-| `GTTS_DEVICE` | cuda | device for griot/omniasr judges |
+(Full local synthesis is possible too — `python pipeline.py` — but the clips then need
+uploading before scoring, which the Jobs path does automatically; that's the supported flow.)
 
 ## Results
 
-- `benchmarks/{iso}.yaml` — voices ranked per language (with the ASR judge and its own
-  CER floor on real speech)
+- `benchmarks/{iso}.yaml` — voices ranked per language (with the ASR judge and its own CER
+  floor on real speech)
 - `benchmarks/voice/{voice}.yaml` — languages ranked per voice
 - `benchmarks/voice_matrix.json` — full voice × language CER matrix + demo-clip map
-- `transcriptions/{iso}_{voice}.csv` — every clip's reference, universally-converted text,
-  transcription, WER and CER (auditable, same format as nsanku)
+- `audit: transcriptions/{iso}_{voice}.csv` per clip in the audio dataset repo
 
 ## HF Space
 
-[GhanaOpenAI/gtts-benchmark (Space)](https://huggingface.co/spaces/GhanaOpenAI/gtts-benchmark)
+[ghananlpcommunity/gtts-benchmark (Space)](https://huggingface.co/spaces/ghananlpcommunity/gtts-benchmark)
 renders the leaderboard and matrix from the GitHub `benchmarks/` files and streams demo audio
-from `GhanaOpenAI/gtts-benchmark-audio`.
+from `ghananlpcommunity/gtts-benchmark-audio`.
 
-Deploy:
+Deploy (needs an HF token with write access to the org):
 
 ```bash
 python -c "from huggingface_hub import create_repo, upload_folder
-create_repo('GhanaOpenAI/gtts-benchmark', repo_type='space', space_sdk='static', exist_ok=True)
-upload_folder(repo_id='GhanaOpenAI/gtts-benchmark', repo_type='space', folder_path='space')"
+create_repo('ghananlpcommunity/gtts-benchmark', repo_type='space', space_sdk='static', exist_ok=True)
+upload_folder(repo_id='ghananlpcommunity/gtts-benchmark', repo_type='space', folder_path='space')"
 python scripts/push_audio.py
 ```
 
@@ -93,13 +103,14 @@ python scripts/push_audio.py
 
 ```
 benchmark/            benchmark library (config, dataset, normalize, synth,
-                      asr judges, evaluate, pipeline)
+                      asr judges, evaluate, job)
 data/                 ASR judge registry (from nsanku)
-audio/                synthesised clips (gitignored)
+audio/                synthesised clips (gitignored; lives in the HF dataset repo)
 benchmarks/           results: per-language YAMLs, matrix JSON
-transcriptions/       per-sample CSVs
+transcriptions/       per-sample CSVs (gitignored; in the HF dataset repo)
+docker/               synthesis image Dockerfile
+scripts/              HF-job submitter, results assembler, audio uploader
 space/                HF Space static app
-scripts/              audio upload helper
 ```
 
 ## Why universal graphemes?

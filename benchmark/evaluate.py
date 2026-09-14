@@ -50,12 +50,8 @@ class _NoAliasDumper(yaml.SafeDumper):
         return True
 
 
-def _slug(s):
-    return s.replace("/", "__").replace("-", "_")
-
-
 def clip_dir(iso, voice):
-    return AUDIO_DIR / iso / _slug(voice)
+    return AUDIO_DIR / iso / voice
 
 
 def bench_yaml(iso):
@@ -63,11 +59,11 @@ def bench_yaml(iso):
 
 
 def voice_yaml(voice):
-    return BENCHMARK_DIR / "voice" / f"{_slug(voice)}.yaml"
+    return BENCHMARK_DIR / "voice" / f"{voice}.yaml"
 
 
 def transcriptions_csv(iso, voice):
-    return TRANSCRIPTIONS_DIR / f"{iso}_{_slug(voice)}.csv"
+    return TRANSCRIPTIONS_DIR / f"{iso}_{voice}.csv"
 
 
 def today():
@@ -233,7 +229,7 @@ async def synthesize_cell_async(voice, iso, converter=None, force=False,
 
 
 def _write_text_index(iso, voice, rows):
-    path = AUDIO_DIR / iso / f"TEXTS_{_slug(voice)}.txt"
+    path = AUDIO_DIR / iso / f"TEXTS_{voice}.txt"
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         f.write(f"{ISO_TO_NAME[iso]} ({iso}) read by voice "
@@ -307,6 +303,11 @@ def score_cell(voice, iso, judge=None, force=False, limit=None):
         print("    no valid output")
         return {}
 
+    sample_clip = next(
+        (k for k in sorted(entries, key=lambda x: int(x))
+         if entries[k].get("cer") is not None),
+        None,
+    )
     mean_cer = round(sum(cers) / len(cers), 4)
     mean_wer = round(sum(wers) / len(wers), 4)
     print(f"    CER {mean_cer:.4f} WER {mean_wer:.4f} "
@@ -319,6 +320,7 @@ def score_cell(voice, iso, judge=None, force=False, limit=None):
         "score": mean_cer,
         "samples": len(entries),
         "valid": len(cers),
+        "sample_clip": sample_clip,
     }
 
 
@@ -473,6 +475,59 @@ def _write_matrix(voice_iso):
     with open(BENCHMARK_DIR / "voice_matrix.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
     print(f"  Wrote matrix ({len(vlist)} voices x {len(isos)} languages)")
+
+
+# ── Language-level orchestrators (used by HF Job containers) ────────────────
+
+
+def synthesize_language(iso, force=False, concurrency=CONCURRENCY, limit=None):
+    """Synthesise every voice for *iso*. Returns (written, failed) totals."""
+    from .normalize import UniversalConverter
+
+    converter = UniversalConverter()
+    _lang_pool(iso, converter, force=force)
+    total_w = total_f = 0
+    for voice in voices():
+        try:
+            w, f = asyncio.run(synthesize_cell_async(
+                voice, iso, converter, force=force,
+                concurrency=concurrency, limit=limit,
+            ))
+            total_w += w
+            total_f += f
+        except Exception as e:
+            print(f"  ERROR synth {voice}->{iso}: {e}")
+            total_f += 1
+    return total_w, total_f
+
+
+def score_language(iso, device=None, force=False, limit=None, verbose=True):
+    """Score every voice for *iso* with that language's judge.
+
+    Returns a list of per-voice summary dicts (safe to JSON-serialise).
+    """
+    device = device or DEVICE
+    judge = None
+    summaries = []
+    try:
+        if verbose:
+            print(f"  Loading ASR judge for {iso} ...")
+        judge = load_judge(iso, device=device)
+        for voice in voices():
+            try:
+                res = score_cell(voice, iso, judge=judge,
+                                force=force, limit=limit)
+                if res:
+                    summaries.append(res)
+            except Exception as e:
+                print(f"  ERROR score {voice}->{iso}: {e}")
+    finally:
+        if judge is not None:
+            try:
+                judge.cleanup()
+            except Exception:
+                pass
+    return summaries
 
 
 # ── Internal helpers ─────────────────────────────────────────────────────────

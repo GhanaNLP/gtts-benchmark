@@ -8,7 +8,8 @@ ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 AUDIO_DIR = Path(os.environ.get("GTTS_AUDIO_DIR", str(ROOT / "audio")))
 BENCHMARK_DIR = Path(os.environ.get("GTTS_RESULTS_DIR", str(ROOT / "benchmarks")))
-TRANSCRIPTIONS_DIR = ROOT / "transcriptions"
+TRANSCRIPTIONS_DIR = Path(
+    os.environ.get("GTTS_TRANSCRIPTIONS_DIR", str(ROOT / "transcriptions")))
 
 # Text source: same corpus as nsanku-tts-benchmark.
 GHANA_SENTENCES = "ghanaopenai/ghana-sentences"
