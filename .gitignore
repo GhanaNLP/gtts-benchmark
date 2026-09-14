@@ -11,3 +11,5 @@ transcriptions/
 *.egg
 .venv/
 venv/
+synth_full.log
+*.log
