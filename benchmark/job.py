@@ -121,7 +121,7 @@ def main():
     device = args.device or DEVICE
 
     if args.stage == "synth":
-        _pull(api, [f"audio/{args.lang}/*"], WORK)
+        _pull(api, [f"audio/{args.lang}/**"], WORK)
 
         def _push_cell(voice, written, failed):
             push_cell_dir = audio_dir / args.lang / voice
@@ -140,7 +140,7 @@ def main():
               f"Synthesis: {args.lang} ({w} ok, {f} failed)")
         return
 
-    _pull(api, [f"audio/{args.lang}/*", f"transcriptions/{args.lang}_*"], WORK)
+    _pull(api, [f"audio/{args.lang}/**", f"transcriptions/{args.lang}_*"], WORK)
     results = score_language(args.lang, device=device, force=args.force)
     _push(api, trans_dir, "transcriptions", f"Transcriptions: {args.lang}")
 
