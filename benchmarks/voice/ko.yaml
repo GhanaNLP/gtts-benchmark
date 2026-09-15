@@ -1,0 +1,30 @@
+ietf: ko
+voice: Korean
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ko
+  language: Asante Twi
+  cer: 0.5867
+  wer: 1.0837
+  score: 0.5867
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/ko/00003.wav
+- model: ko
+  language: Akuapem Twi
+  cer: 0.5994
+  wer: 1.1226
+  score: 0.5994
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/ko/00007.wav
+- model: ko
+  language: Ga
+  cer: 0.6484
+  wer: 1.1246
+  score: 0.6484
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ko/00002.wav

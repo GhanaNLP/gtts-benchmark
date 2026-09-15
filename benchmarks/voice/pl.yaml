@@ -1,0 +1,22 @@
+ietf: pl
+voice: Polish
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: pl
+  language: Asante Twi
+  cer: 0.3951
+  wer: 0.9457
+  score: 0.3951
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/pl/00003.wav
+- model: pl
+  language: Ga
+  cer: 0.424
+  wer: 1.0588
+  score: 0.424
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/pl/00002.wav

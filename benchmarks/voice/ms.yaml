@@ -1,0 +1,30 @@
+ietf: ms
+voice: Malay
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ms
+  language: Ga
+  cer: 0.4533
+  wer: 0.9775
+  score: 0.4533
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ms/00002.wav
+- model: ms
+  language: Akuapem Twi
+  cer: 0.4878
+  wer: 0.9601
+  score: 0.4878
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/ms/00007.wav
+- model: ms
+  language: Asante Twi
+  cer: 0.4943
+  wer: 0.9612
+  score: 0.4943
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/ms/00003.wav

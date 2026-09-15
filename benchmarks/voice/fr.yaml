@@ -1,0 +1,30 @@
+ietf: fr
+voice: French
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: fr
+  language: Asante Twi
+  cer: 0.5006
+  wer: 1.038
+  score: 0.5006
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/fr/00003.wav
+- model: fr
+  language: Akuapem Twi
+  cer: 0.5218
+  wer: 1.062
+  score: 0.5218
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/fr/00007.wav
+- model: fr
+  language: Ga
+  cer: 0.5667
+  wer: 1.1065
+  score: 0.5667
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/fr/00002.wav

@@ -1,0 +1,30 @@
+ietf: eu
+voice: Basque
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: eu
+  language: Asante Twi
+  cer: 0.4167
+  wer: 1.0003
+  score: 0.4167
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/eu/00003.wav
+- model: eu
+  language: Ga
+  cer: 0.4384
+  wer: 0.9099
+  score: 0.4384
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/eu/00002.wav
+- model: eu
+  language: Akuapem Twi
+  cer: 0.4602
+  wer: 0.9759
+  score: 0.4602
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/eu/00007.wav

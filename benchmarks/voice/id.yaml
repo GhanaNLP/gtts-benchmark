@@ -1,0 +1,30 @@
+ietf: id
+voice: Indonesian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: id
+  language: Asante Twi
+  cer: 0.3403
+  wer: 0.84
+  score: 0.3403
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/id/00003.wav
+- model: id
+  language: Akuapem Twi
+  cer: 0.3498
+  wer: 0.8405
+  score: 0.3498
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/id/00007.wav
+- model: id
+  language: Ga
+  cer: 0.4199
+  wer: 0.9485
+  score: 0.4199
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/id/00002.wav

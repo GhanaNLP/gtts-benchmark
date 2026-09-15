@@ -1,0 +1,30 @@
+ietf: ja
+voice: Japanese
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ja
+  language: Asante Twi
+  cer: 0.6224
+  wer: 1.1777
+  score: 0.6224
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/ja/00003.wav
+- model: ja
+  language: Akuapem Twi
+  cer: 0.6508
+  wer: 1.1873
+  score: 0.6508
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/ja/00007.wav
+- model: ja
+  language: Ga
+  cer: 0.6953
+  wer: 1.1866
+  score: 0.6953
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ja/00002.wav

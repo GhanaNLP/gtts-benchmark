@@ -1,0 +1,30 @@
+ietf: es
+voice: Spanish
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: es
+  language: Ga
+  cer: 0.4679
+  wer: 1.0517
+  score: 0.4679
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/es/00002.wav
+- model: es
+  language: Asante Twi
+  cer: 0.4858
+  wer: 1.0402
+  score: 0.4858
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/es/00003.wav
+- model: es
+  language: Akuapem Twi
+  cer: 0.4966
+  wer: 1.0221
+  score: 0.4966
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/es/00007.wav

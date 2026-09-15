@@ -1,0 +1,30 @@
+ietf: km
+voice: Khmer
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: km
+  language: Ga
+  cer: 0.6005
+  wer: 0.9817
+  score: 0.6005
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/km/00002.wav
+- model: km
+  language: Akuapem Twi
+  cer: 0.6084
+  wer: 1.0186
+  score: 0.6084
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/km/00007.wav
+- model: km
+  language: Asante Twi
+  cer: 0.6099
+  wer: 0.9977
+  score: 0.6099
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/km/00003.wav

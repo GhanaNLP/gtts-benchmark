@@ -1,0 +1,30 @@
+ietf: cs
+voice: Czech
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: cs
+  language: Asante Twi
+  cer: 0.5876
+  wer: 0.9359
+  score: 0.5876
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/cs/00003.wav
+- model: cs
+  language: Ga
+  cer: 0.6221
+  wer: 0.9482
+  score: 0.6221
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/cs/00002.wav
+- model: cs
+  language: Akuapem Twi
+  cer: 0.6263
+  wer: 0.9484
+  score: 0.6263
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/cs/00007.wav

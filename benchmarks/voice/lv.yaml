@@ -1,0 +1,30 @@
+ietf: lv
+voice: Latvian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: lv
+  language: Ga
+  cer: 0.4449
+  wer: 1.0323
+  score: 0.4449
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/lv/00002.wav
+- model: lv
+  language: Akuapem Twi
+  cer: 0.5089
+  wer: 1.0272
+  score: 0.5089
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/lv/00007.wav
+- model: lv
+  language: Asante Twi
+  cer: 0.514
+  wer: 1.0331
+  score: 0.514
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/lv/00003.wav

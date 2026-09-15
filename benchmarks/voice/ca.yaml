@@ -1,0 +1,30 @@
+ietf: ca
+voice: Catalan
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ca
+  language: Ga
+  cer: 0.4255
+  wer: 1.0599
+  score: 0.4255
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ca/00002.wav
+- model: ca
+  language: Asante Twi
+  cer: 0.4361
+  wer: 1.0703
+  score: 0.4361
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/ca/00003.wav
+- model: ca
+  language: Akuapem Twi
+  cer: 0.4421
+  wer: 1.0706
+  score: 0.4421
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/ca/00007.wav

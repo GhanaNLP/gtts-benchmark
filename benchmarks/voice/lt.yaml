@@ -1,0 +1,30 @@
+ietf: lt
+voice: Lithuanian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: lt
+  language: Asante Twi
+  cer: 0.4714
+  wer: 0.9721
+  score: 0.4714
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/lt/00003.wav
+- model: lt
+  language: Akuapem Twi
+  cer: 0.4788
+  wer: 0.983
+  score: 0.4788
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/lt/00007.wav
+- model: lt
+  language: Ga
+  cer: 0.5083
+  wer: 1.0442
+  score: 0.5083
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/lt/00002.wav

@@ -1,0 +1,30 @@
+ietf: jw
+voice: Javanese
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: jw
+  language: Asante Twi
+  cer: 0.4565
+  wer: 0.9195
+  score: 0.4565
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/jw/00003.wav
+- model: jw
+  language: Akuapem Twi
+  cer: 0.4611
+  wer: 0.9081
+  score: 0.4611
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/jw/00007.wav
+- model: jw
+  language: Ga
+  cer: 0.5155
+  wer: 0.9837
+  score: 0.5155
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/jw/00002.wav

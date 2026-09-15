@@ -1,0 +1,30 @@
+ietf: 'no'
+voice: Norwegian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: 'no'
+  language: Asante Twi
+  cer: 0.524
+  wer: 0.9961
+  score: 0.524
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/no/00003.wav
+- model: 'no'
+  language: Akuapem Twi
+  cer: 0.5255
+  wer: 0.9978
+  score: 0.5255
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/no/00007.wav
+- model: 'no'
+  language: Ga
+  cer: 0.546
+  wer: 1.0302
+  score: 0.546
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/no/00002.wav

@@ -1,0 +1,30 @@
+ietf: da
+voice: Danish
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: da
+  language: Asante Twi
+  cer: 0.5485
+  wer: 0.9343
+  score: 0.5485
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/da/00003.wav
+- model: da
+  language: Akuapem Twi
+  cer: 0.5572
+  wer: 0.9449
+  score: 0.5572
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/da/00007.wav
+- model: da
+  language: Ga
+  cer: 0.5693
+  wer: 1.008
+  score: 0.5693
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/da/00002.wav

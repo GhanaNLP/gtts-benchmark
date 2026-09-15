@@ -1,0 +1,30 @@
+ietf: iw
+voice: Hebrew
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: iw
+  language: Asante Twi
+  cer: 0.5716
+  wer: 1.0005
+  score: 0.5716
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/iw/00003.wav
+- model: iw
+  language: Akuapem Twi
+  cer: 0.5768
+  wer: 1.002
+  score: 0.5768
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/iw/00007.wav
+- model: iw
+  language: Ga
+  cer: 0.596
+  wer: 1.002
+  score: 0.596
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/iw/00002.wav

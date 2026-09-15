@@ -1,0 +1,30 @@
+ietf: el
+voice: Greek
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: el
+  language: Asante Twi
+  cer: 0.5813
+  wer: 1.1134
+  score: 0.5813
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/el/00003.wav
+- model: el
+  language: Akuapem Twi
+  cer: 0.585
+  wer: 1.1115
+  score: 0.585
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/el/00007.wav
+- model: el
+  language: Ga
+  cer: 0.6116
+  wer: 1.092
+  score: 0.6116
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/el/00002.wav

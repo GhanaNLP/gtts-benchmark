@@ -1,0 +1,30 @@
+ietf: ne
+voice: Nepali
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ne
+  language: Akuapem Twi
+  cer: 0.6342
+  wer: 0.9995
+  score: 0.6342
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/ne/00007.wav
+- model: ne
+  language: Asante Twi
+  cer: 0.6501
+  wer: 1.003
+  score: 0.6501
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/ne/00003.wav
+- model: ne
+  language: Ga
+  cer: 0.6747
+  wer: 1.0219
+  score: 0.6747
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ne/00002.wav

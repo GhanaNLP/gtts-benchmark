@@ -1,0 +1,22 @@
+ietf: pa
+voice: Punjabi (Gurmukhi)
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: pa
+  language: Ga
+  cer: 0.5863
+  wer: 1.0262
+  score: 0.5863
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/pa/00002.wav
+- model: pa
+  language: Asante Twi
+  cer: 0.6266
+  wer: 0.9992
+  score: 0.6266
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/pa/00003.wav

@@ -1,0 +1,30 @@
+ietf: gl
+voice: Galician
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: gl
+  language: Ga
+  cer: 0.3979
+  wer: 1.065
+  score: 0.3979
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/gl/00002.wav
+- model: gl
+  language: Asante Twi
+  cer: 0.4396
+  wer: 1.0446
+  score: 0.4396
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/gl/00003.wav
+- model: gl
+  language: Akuapem Twi
+  cer: 0.4519
+  wer: 1.0585
+  score: 0.4519
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/gl/00007.wav

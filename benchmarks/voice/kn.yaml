@@ -1,0 +1,30 @@
+ietf: kn
+voice: Kannada
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: kn
+  language: Ga
+  cer: 0.5754
+  wer: 1.0144
+  score: 0.5754
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/kn/00002.wav
+- model: kn
+  language: Akuapem Twi
+  cer: 0.5969
+  wer: 1.0037
+  score: 0.5969
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/kn/00007.wav
+- model: kn
+  language: Asante Twi
+  cer: 0.608
+  wer: 1.0331
+  score: 0.608
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/kn/00003.wav

@@ -1,0 +1,14 @@
+ietf: pt-PT
+voice: Portuguese (Portugal)
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: pt-PT
+  language: Ga
+  cer: 0.6408
+  wer: 1.1617
+  score: 0.6408
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/pt-PT/00002.wav

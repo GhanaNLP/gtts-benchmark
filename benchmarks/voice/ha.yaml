@@ -1,0 +1,30 @@
+ietf: ha
+voice: Hausa
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ha
+  language: Asante Twi
+  cer: 0.3666
+  wer: 0.9073
+  score: 0.3666
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/ha/00003.wav
+- model: ha
+  language: Akuapem Twi
+  cer: 0.3815
+  wer: 0.9473
+  score: 0.3815
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/ha/00007.wav
+- model: ha
+  language: Ga
+  cer: 0.4888
+  wer: 1.0749
+  score: 0.4888
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ha/00002.wav

@@ -1,0 +1,30 @@
+ietf: bn
+voice: Bengali
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: bn
+  language: Akuapem Twi
+  cer: 0.5389
+  wer: 1.0098
+  score: 0.5389
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/bn/00007.wav
+- model: bn
+  language: Ga
+  cer: 0.5471
+  wer: 1.0857
+  score: 0.5471
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/bn/00002.wav
+- model: bn
+  language: Asante Twi
+  cer: 0.5531
+  wer: 1.0153
+  score: 0.5531
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/bn/00003.wav

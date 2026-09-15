@@ -1,0 +1,30 @@
+ietf: mr
+voice: Marathi
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: mr
+  language: Akuapem Twi
+  cer: 0.5009
+  wer: 0.9871
+  score: 0.5009
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/mr/00007.wav
+- model: mr
+  language: Asante Twi
+  cer: 0.5046
+  wer: 0.9974
+  score: 0.5046
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/mr/00003.wav
+- model: mr
+  language: Ga
+  cer: 0.5059
+  wer: 1.019
+  score: 0.5059
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/mr/00002.wav

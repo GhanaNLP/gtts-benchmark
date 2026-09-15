@@ -1,0 +1,30 @@
+ietf: hu
+voice: Hungarian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: hu
+  language: Ga
+  cer: 0.461
+  wer: 1.0927
+  score: 0.461
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/hu/00002.wav
+- model: hu
+  language: Asante Twi
+  cer: 0.4815
+  wer: 1.0436
+  score: 0.4815
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/hu/00003.wav
+- model: hu
+  language: Akuapem Twi
+  cer: 0.4886
+  wer: 1.0672
+  score: 0.4886
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/hu/00007.wav

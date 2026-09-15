@@ -1,0 +1,30 @@
+ietf: la
+voice: Latin
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: la
+  language: Ga
+  cer: 0.4735
+  wer: 1.0918
+  score: 0.4735
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/la/00002.wav
+- model: la
+  language: Asante Twi
+  cer: 0.4998
+  wer: 1.069
+  score: 0.4998
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/la/00003.wav
+- model: la
+  language: Akuapem Twi
+  cer: 0.5327
+  wer: 1.0701
+  score: 0.5327
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/la/00007.wav

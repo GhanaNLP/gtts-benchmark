@@ -1,0 +1,30 @@
+ietf: is
+voice: Icelandic
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: is
+  language: Ga
+  cer: 0.5469
+  wer: 0.9846
+  score: 0.5469
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/is/00002.wav
+- model: is
+  language: Akuapem Twi
+  cer: 0.5792
+  wer: 0.9838
+  score: 0.5792
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/is/00007.wav
+- model: is
+  language: Asante Twi
+  cer: 0.5864
+  wer: 1.003
+  score: 0.5864
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/is/00003.wav

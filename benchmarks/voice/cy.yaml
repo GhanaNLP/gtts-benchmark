@@ -1,0 +1,30 @@
+ietf: cy
+voice: Welsh
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: cy
+  language: Asante Twi
+  cer: 0.4578
+  wer: 0.9425
+  score: 0.4578
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/cy/00003.wav
+- model: cy
+  language: Akuapem Twi
+  cer: 0.4784
+  wer: 0.9666
+  score: 0.4784
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/cy/00007.wav
+- model: cy
+  language: Ga
+  cer: 0.4978
+  wer: 0.9025
+  score: 0.4978
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/cy/00002.wav

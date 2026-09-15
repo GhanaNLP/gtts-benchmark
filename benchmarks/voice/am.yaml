@@ -1,0 +1,30 @@
+ietf: am
+voice: Amharic
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: am
+  language: Asante Twi
+  cer: 0.5157
+  wer: 0.9936
+  score: 0.5157
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/am/00003.wav
+- model: am
+  language: Akuapem Twi
+  cer: 0.5232
+  wer: 1.0071
+  score: 0.5232
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/am/00007.wav
+- model: am
+  language: Ga
+  cer: 0.5777
+  wer: 1.0699
+  score: 0.5777
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/am/00002.wav

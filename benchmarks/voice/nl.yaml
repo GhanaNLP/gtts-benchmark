@@ -1,0 +1,30 @@
+ietf: nl
+voice: Dutch
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: nl
+  language: Ga
+  cer: 0.5009
+  wer: 1.0571
+  score: 0.5009
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/nl/00002.wav
+- model: nl
+  language: Asante Twi
+  cer: 0.5108
+  wer: 0.9873
+  score: 0.5108
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/nl/00003.wav
+- model: nl
+  language: Akuapem Twi
+  cer: 0.5402
+  wer: 1.003
+  score: 0.5402
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/nl/00007.wav

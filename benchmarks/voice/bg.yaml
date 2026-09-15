@@ -1,0 +1,30 @@
+ietf: bg
+voice: Bulgarian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: bg
+  language: Akuapem Twi
+  cer: 0.4669
+  wer: 0.9659
+  score: 0.4669
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/bg/00007.wav
+- model: bg
+  language: Asante Twi
+  cer: 0.4673
+  wer: 0.9599
+  score: 0.4673
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/bg/00003.wav
+- model: bg
+  language: Ga
+  cer: 0.634
+  wer: 1.0728
+  score: 0.634
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/bg/00002.wav

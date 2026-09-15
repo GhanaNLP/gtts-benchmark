@@ -1,0 +1,30 @@
+ietf: my
+voice: Myanmar (Burmese)
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: my
+  language: Akuapem Twi
+  cer: 0.965
+  wer: 1.0
+  score: 0.965
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/my/00007.wav
+- model: my
+  language: Asante Twi
+  cer: 0.9653
+  wer: 1.0
+  score: 0.9653
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/my/00003.wav
+- model: my
+  language: Ga
+  cer: 0.978
+  wer: 1.0
+  score: 0.978
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/my/00002.wav

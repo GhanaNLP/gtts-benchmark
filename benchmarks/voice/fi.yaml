@@ -1,0 +1,30 @@
+ietf: fi
+voice: Finnish
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: fi
+  language: Ga
+  cer: 0.4076
+  wer: 0.9457
+  score: 0.4076
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/fi/00002.wav
+- model: fi
+  language: Asante Twi
+  cer: 0.4296
+  wer: 0.9417
+  score: 0.4296
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/fi/00003.wav
+- model: fi
+  language: Akuapem Twi
+  cer: 0.4694
+  wer: 0.9713
+  score: 0.4694
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/fi/00007.wav

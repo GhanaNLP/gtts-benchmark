@@ -1,0 +1,30 @@
+ietf: gu
+voice: Gujarati
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: gu
+  language: Asante Twi
+  cer: 0.5692
+  wer: 1.0403
+  score: 0.5692
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_asante/gu/00003.wav
+- model: gu
+  language: Akuapem Twi
+  cer: 0.5717
+  wer: 1.0066
+  score: 0.5717
+  samples: 200
+  valid: 200
+  sample_clip: audio/twi_akuapem/gu/00007.wav
+- model: gu
+  language: Ga
+  cer: 0.5735
+  wer: 1.0534
+  score: 0.5735
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/gu/00002.wav

@@ -1,0 +1,14 @@
+ietf: ru
+voice: Russian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ru
+  language: Ga
+  cer: 0.724
+  wer: 1.1281
+  score: 0.724
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ru/00002.wav

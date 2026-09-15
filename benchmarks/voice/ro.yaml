@@ -1,0 +1,14 @@
+ietf: ro
+voice: Romanian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: ro
+  language: Ga
+  cer: 0.3927
+  wer: 0.9631
+  score: 0.3927
+  samples: 200
+  valid: 200
+  sample_clip: audio/gaa/ro/00002.wav
