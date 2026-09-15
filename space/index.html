@@ -376,33 +376,31 @@ function h(s) {
 
 // ── Minimal YAML (subset used in this repo's benchmarks + matrix) ─────────
 function parseYaml(text) {
-  const lines = text.split("\n");
   const obj = {};
-  let key, list = null, listItem = null;
-  for (const raw of lines) {
+  let curKey = null;
+  let list = null;
+  let item = null;
+  for (const raw of text.split("\n")) {
     if (!raw.trim() || raw.trim().startsWith("#")) continue;
-    const line = stripComment(raw).replace(/\s+$/,"");
-    const isComment = !line.trim();
-    if (isComment) continue;
-    if (/^sample_clips:$/.test(line)) { key="sample_clips"; list=null; continue; }
-    if (/^benchmarks:$/.test(line)) { key="benchmarks"; list=obj.benchmarks=[]; continue; }
-    const listMatch = line.match(/^  - \s*(\w+):\s*(.*)$/);
-    if (listMatch) {
-      listItem = {};
-      listItem[listMatch[1]] = scalar(listMatch[2]);
-      list.push(listItem);
+    const line = raw.replace(/[ \t]+$/, "");
+    if (/^benchmarks:$/.test(line)) { list = obj.benchmarks = []; item = null; curKey = null; continue; }
+    if (/^languages:$/.test(line)) { list = obj.languages = []; item = null; curKey = null; continue; }
+    if (/^sample_clips:$/.test(line)) { obj.sample_clips = {}; curKey = "sample_clips"; list = null; item = null; continue; }
+    if (/^judge:$/.test(line)) { obj.judge = {}; curKey = "judge"; list = null; item = null; continue; }
+    const dash = /^(\s*)- (\S+):\s*(.*)$/.exec(line);
+    if (dash && list) {
+      item = {};
+      item[dash[2]] = scalar(dash[3]);
+      list.push(item);
+      curKey = null;
       continue;
     }
-    if (list && listItem && /^    (\w+):\s*(.*)$/.test(line)) {
-      const m = line.match(/^    (\w+):\s*(.*)$/);
-      listItem[m[1]] = scalar(m[2]);
-      continue;
-    }
-    const m = line.match(/^(\w+):\s*(.*)$/);
-    if (m) { obj[m[1]] = scalar(m[2]); continue; }
-    const m2 = line.match(/^(\w+):\s*$/);
-    if (m2) { key = m2[1]; continue; }
-    if (key && line.startsWith("  ") && /^\d+$/.test(line.trim())) { continue; }
+    const sub = /^(\s+)(\S+):\s*(.*)$/.exec(line);
+    if (sub && item) { item[sub[2]] = scalar(sub[3]); continue; }
+    if (sub && curKey === "sample_clips") { obj.sample_clips[sub[2]] = scalar(sub[3]); continue; }
+    if (sub && curKey === "judge") { obj.judge[sub[2]] = scalar(sub[3]); continue; }
+    const top = /^(\S+):\s*(.*)$/.exec(line);
+    if (top) { obj[top[1]] = scalar(top[2]); continue; }
   }
   return obj;
 }
