@@ -152,11 +152,11 @@ def main():
 
     if args.no_wait:
         for i, (stage, iso, image, flavor, is_score) in enumerate(planned):
-            print(f"  submitted {stage:6s} {iso}  ({flavor})" if args.dry_run
-                  else f"  [dry-run] {stage:6s} {iso}  ({flavor})")
-            if not args.dry_run:
-                job = submit(stage, iso, image, flavor, is_score, args, token)
-                print(f"  submitted {stage:6s} {iso}  ({flavor})  -> {job.id}")
+            if args.dry_run:
+                print(f"  [dry-run] {stage:6s} {iso}  ({flavor})")
+                continue
+            job = submit(stage, iso, image, flavor, is_score, args, token)
+            print(f"  submitted {stage:6s} {iso}  ({flavor})  -> {job.id}")
             if args.stage == "synth" and i < len(planned) - 1:
                 import time
                 time.sleep(8)   # stagger submissions; don't open the Google
