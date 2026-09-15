@@ -480,6 +480,14 @@ def _write_matrix(voice_iso):
 # ── Language-level orchestrators (used by HF Job containers) ────────────────
 
 
+def synthesize_voice_pass(voice, iso, converter, force, concurrency, limit):
+    """Run one synthesis pass over *voice*'s missing clips."""
+    return asyncio.run(synthesize_cell_async(
+        voice, iso, converter, force=force,
+        concurrency=concurrency, limit=limit,
+    ))
+
+
 def synthesize_language(iso, force=False, concurrency=CONCURRENCY, limit=None,
                         on_cell=None):
     """Synthesise every voice for *iso*. Returns (written, failed) totals.
@@ -487,28 +495,46 @@ def synthesize_language(iso, force=False, concurrency=CONCURRENCY, limit=None,
     ``on_cell(voice, written, failed)`` is invoked after each voice so a
     caller (HF Job) can push progress incrementally instead of waiting for
     the full language to finish.
+
+    Google throttles gTTS as a per-IP window: enough failures in a short
+    window trips a 429 storm that lasts minutes.  Per-cell work therefore
+    loops ``GTTS_VOICE_RETRIES`` times with a ``GTTS_VOICE_COOLDOWN`` pause
+    between passes, so the missing clips get retried long after the burst
+    that caused them.  Each pass only touches clips still missing, so a
+    working window sails through and a throttled one just waits.
     """
+    import os as _os
     from .normalize import UniversalConverter
+
+    retries = int(_os.environ.get("GTTS_VOICE_RETRIES", "4"))
+    cooldown = float(_os.environ.get("GTTS_VOICE_COOLDOWN", "120"))
 
     converter = UniversalConverter()
     _lang_pool(iso, converter, force=force)
     total_w = total_f = 0
     for voice in voices():
-        try:
-            w, f = asyncio.run(synthesize_cell_async(
-                voice, iso, converter, force=force,
-                concurrency=concurrency, limit=limit,
-            ))
-            total_w += w
-            total_f += f
-            if on_cell is not None:
-                try:
-                    on_cell(voice, w, f)
-                except Exception as e:
-                    print(f"  on_cell failed for {voice}: {e}")
-        except Exception as e:
-            print(f"  ERROR synth {voice}->{iso}: {e}")
-            total_f += 1
+        w = f = 0
+        for attempt in range(retries + 1):
+            try:
+                pw, pf = synthesize_voice_pass(
+                    voice, iso, converter, force, concurrency, limit)
+            except Exception as e:
+                print(f"  ERROR synth {voice}->{iso}: {e}")
+                pw, pf = 0, 1
+            w += pw
+            f += pf
+            if pf == 0 or attempt == retries:
+                break
+            print(f"    retry {voice}->{iso} in {cooldown:.0f}s "
+                  f"(pass {attempt + 2}/{(retries + 1)})")
+            time.sleep(cooldown)
+        total_w += w
+        total_f += f
+        if on_cell is not None:
+            try:
+                on_cell(voice, w, f)
+            except Exception as e:
+                print(f"  on_cell failed for {voice}: {e}")
     return total_w, total_f
 
 
