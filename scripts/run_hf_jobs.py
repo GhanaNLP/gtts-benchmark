@@ -104,7 +104,7 @@ def wait_batch(ids, token, poll=120, max_wait_h=13, label=""):
                 if (j.id or "") in ids]
         stages = Counter(j.status.stage for j in jobs)
         done = sum(n for s, n in stages.items()
-                   if s in ("COMPLETED", "ERROR", "CANCELLED"))
+                   if s in ("COMPLETED", "ERROR", "CANCELLED", "CANCELED"))
         print(f"  [{label}] {','.join(j.id[-5:] for j in jobs)} "
               f"{dict(stages)}", flush=True)
         if done == len(ids):
