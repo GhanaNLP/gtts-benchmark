@@ -215,7 +215,14 @@ function populateSelects() {
     `<option value="${v}">${v} — ${voiceName(v)}</option>`).join("");
 }
 
-function voiceName(v) { return v; }
+function voiceName(v) {
+  try {
+    const dn = new Intl.DisplayNames(['en'], { type: 'language' });
+    return dn.of(v) || v;
+  } catch (e) {
+    return v;
+  }
+}
 
 function cerBadge(cer) {
   if (cer == null) return `<span class="small">—</span>`;
@@ -249,7 +256,7 @@ function renderGlobal() {
     const demo = bestCell ? `${LANG_NAME[bestCell.iso]} <span class="small">(${bestCell.cer.toFixed(2)})</span> ${audioTag(bestCell.iso, v)}` : `<span class="small">—</span>`;
     return `<tr class="rowlink" onclick="openVoice('${v}')">
       <td>${i+1}</td>
-      <td><b class="mono">${h(v)}</b></td>
+      <td><b>${voiceName(v)}</b> <span class="small mono">(${h(v)})</span></td>
       <td class="num">${avg != null ? avg.toFixed(3) : "—"}</td>
       <td class="num">${LANGS.map(([iso]) => {
         const c = row[iso];
@@ -281,7 +288,7 @@ function renderLang() {
     const clip = audioTag(iso, b.model);
     return `<tr>
       <td>${i+1}</td>
-      <td><b class="mono">${h(b.model)}</b></td>
+      <td><b>${voiceName(b.model)}</b> <span class="small mono">(${h(b.model)})</span></td>
       <td class="num">${b.cer != null ? b.cer.toFixed(3) : "—"}</td>
       <td class="num">${b.wer != null ? b.wer.toFixed(3) : "—"}</td>
       <td class="num">${b.valid ?? "—"}/${b.samples ?? "—"}</td>
@@ -311,7 +318,7 @@ function renderMatrix() {
       return `<td class="heat" style="background:${color}" title="${v} -> ${iso}">${c.toFixed(3)}</td>`;
     }).join("");
     return `<tr class="rowlink" onclick="openVoice('${v}')">
-      <td><b class="mono">${h(v)}</b></td>
+      <td><b>${voiceName(v)}</b> <span class="small mono">(${h(v)})</span></td>
       <td class="num">${avg != null ? avg.toFixed(3) : "—"}</td>${cells}</tr>`;
   }).join("");
   document.getElementById("matrixTable").innerHTML =
