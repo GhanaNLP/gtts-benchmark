@@ -5,9 +5,14 @@ import logging
 import random
 import time
 
-from gtts import gTTS
-
 from .config import GTTS_TIMEOUT, GTTS_TLD
+
+# gTTS is only needed for the synthesis stage.  The scoring image (nsanku's,
+# reused verbatim) does not install it, so import lazily instead of at module
+# load time — `import benchmark.synthesizer` must not fail on a score job.
+def _gtts():
+    from gtts import gTTS  # noqa: PLC0415  (lazy — absent in score image)
+    return gTTS
 
 logger = logging.getLogger(__name__)
 
@@ -63,8 +68,8 @@ class GTTSModel:
                    self._tlds[attempt % len(self._tlds)])
             try:
                 buf = io.BytesIO()
-                tts = gTTS(text=text, lang=lang, tld=tld,
-                           timeout=self.timeout, lang_check=False)
+                tts = _gtts()(text=text, lang=lang, tld=tld,
+                              timeout=self.timeout, lang_check=False)
                 tts.write_to_fp(buf)
                 return buf.getvalue()
             except Exception as e:
