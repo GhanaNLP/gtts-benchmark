@@ -5,13 +5,29 @@ scoring: cer
 updated: '2026-09-15'
 languages:
 - model: ja
+  language: Nzema
+  cer: 0.5047
+  wer: 0.9671
+  score: 0.5047
+  samples: 200
+  valid: 200
+  sample_clip: 7
+- model: ja
+  language: Ewe
+  cer: 0.5289
+  wer: 0.9757
+  score: 0.5289
+  samples: 200
+  valid: 200
+  sample_clip: 5
+- model: ja
   language: Asante Twi
   cer: 0.6224
   wer: 1.1777
   score: 0.6224
   samples: 200
   valid: 200
-  sample_clip: audio/twi_asante/ja/00003.wav
+  sample_clip: 3
 - model: ja
   language: Akuapem Twi
   cer: 0.6508
@@ -19,7 +35,7 @@ languages:
   score: 0.6508
   samples: 200
   valid: 200
-  sample_clip: audio/twi_akuapem/ja/00007.wav
+  sample_clip: 7
 - model: ja
   language: Ga
   cer: 0.6953
@@ -27,4 +43,4 @@ languages:
   score: 0.6953
   samples: 200
   valid: 200
-  sample_clip: audio/gaa/ja/00002.wav
+  sample_clip: 2

@@ -1,0 +1,14 @@
+ietf: sr
+voice: Serbian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: sr
+  language: Ewe
+  cer: 0.3345
+  wer: 1.0226
+  score: 0.3345
+  samples: 200
+  valid: 200
+  sample_clip: 5

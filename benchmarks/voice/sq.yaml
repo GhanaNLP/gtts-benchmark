@@ -1,0 +1,14 @@
+ietf: sq
+voice: Albanian
+num_samples: 200
+scoring: cer
+updated: '2026-09-15'
+languages:
+- model: sq
+  language: Ewe
+  cer: 0.2694
+  wer: 0.9463
+  score: 0.2694
+  samples: 200
+  valid: 200
+  sample_clip: 5

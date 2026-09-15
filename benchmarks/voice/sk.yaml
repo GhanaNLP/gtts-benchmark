@@ -5,10 +5,18 @@ scoring: cer
 updated: '2026-09-15'
 languages:
 - model: sk
+  language: Ewe
+  cer: 0.3311
+  wer: 0.9882
+  score: 0.3311
+  samples: 200
+  valid: 200
+  sample_clip: 5
+- model: sk
   language: Ga
   cer: 0.4469
   wer: 0.9606
   score: 0.4469
   samples: 200
   valid: 200
-  sample_clip: audio/gaa/sk/00002.wav
+  sample_clip: 2

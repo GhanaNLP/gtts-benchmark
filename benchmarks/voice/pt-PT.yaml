@@ -5,10 +5,18 @@ scoring: cer
 updated: '2026-09-15'
 languages:
 - model: pt-PT
+  language: Ewe
+  cer: 0.4511
+  wer: 1.1342
+  score: 0.4511
+  samples: 200
+  valid: 200
+  sample_clip: 5
+- model: pt-PT
   language: Ga
   cer: 0.6408
   wer: 1.1617
   score: 0.6408
   samples: 200
   valid: 200
-  sample_clip: audio/gaa/pt-PT/00002.wav
+  sample_clip: 2
