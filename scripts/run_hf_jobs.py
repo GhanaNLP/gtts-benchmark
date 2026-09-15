@@ -183,7 +183,9 @@ def main():
 
         if not args.dry_run and submit_ids:
             wait_batch(submit_ids, token,
-                       label=f"wave {wave} ({','.join(iso for _, iso in batch)})")
+                       label="wave %d (%s)"
+                             % (wave, ",".join(iso for _, (_, iso, *_)
+                                               in batch)))
 
         pending = pending[args.batch:]
         wave += 1
