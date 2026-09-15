@@ -22,6 +22,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 WORK = Path(os.environ.get("GTTS_WORK_DIR", "/data"))
@@ -62,16 +63,34 @@ def _pull(api, patterns, dest):
         print(f"  nothing to resume ({type(e).__name__}: {str(e)[:120]})")
 
 
-def _push(api, folder, path_in_repo, message):
+def _push(api, folder, path_in_repo, message, attempts=5, base_delay=30.0):
+    """Push a folder to the audio dataset repo, retrying HF-side 429s.
+
+    All jobs push to the same dataset repo, so uploads can collide in HF's
+    per-repo commit/concurrency queue.  Back off and retry instead of
+    dropping the whole job.
+    """
     if not any(Path(folder).rglob("*")):
         return
-    api.upload_folder(
-        folder_path=str(folder),
-        path_in_repo=path_in_repo,
-        repo_id=AUDIO_REPO,
-        repo_type="dataset",
-        commit_message=message,
-    )
+    last = None
+    for attempt in range(attempts):
+        try:
+            api.upload_folder(
+                folder_path=str(folder),
+                path_in_repo=path_in_repo,
+                repo_id=AUDIO_REPO,
+                repo_type="dataset",
+                commit_message=message,
+            )
+            return
+        except Exception as e:  # noqa: BLE001 - any HF error: retry
+            last = e
+            delay = base_delay * (2 ** attempt)
+            print(f"  push attempt {attempt + 1}/{attempts} failed "
+                  f"({type(e).__name__}: {str(e)[:100]}); retrying in "
+                  f"{delay:.0f}s")
+            time.sleep(delay)
+    raise last
 
 
 def main():

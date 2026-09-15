@@ -16,7 +16,7 @@ GHANA_SENTENCES = "ghanaopenai/ghana-sentences"
 NUM_SAMPLES = int(os.environ.get("GTTS_NUM_SAMPLES", "200"))
 
 # How many gTTS requests to keep in flight during synthesis.
-CONCURRENCY = int(os.environ.get("GTTS_CONCURRENCY", "8"))
+CONCURRENCY = int(os.environ.get("GTTS_CONCURRENCY", "4"))
 
 # ── The 12 Ghanaian languages ─────────────────────────────────────────────
 # Keyed by the ISO-like codes used across Ghana Open AI benchmarks.

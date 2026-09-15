@@ -74,7 +74,7 @@ def main():
     ap.add_argument("--stage", choices=["synth", "score", "all"], default="all")
     ap.add_argument("--langs", default="",
                     help="comma/space separated subset (default: all 12)")
-    ap.add_argument("--concurrency", type=int, default=24)
+    ap.add_argument("--concurrency", type=int, default=4)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--ref", default="main", help="git ref the jobs check out")
     ap.add_argument("--dry-run", action="store_true")
@@ -104,7 +104,7 @@ def main():
                             _flavor_for(spec), True))
 
     print(f"{len(planned)} job(s) to submit as {NAMESPACE}")
-    for stage, iso, image, flavor, is_score in planned:
+    for i, (stage, iso, image, flavor, is_score) in enumerate(planned):
         label = f"{stage:6s}  {iso}"
         if args.dry_run:
             print(f"  [dry-run] {label}  ({flavor})")
@@ -122,6 +122,10 @@ def main():
             token=token,
         )
         print(f"  submitted {label}  ({flavor})  -> {job.id}")
+        if i < len(planned) - 1 and args.stage == "synth":
+            import time
+            time.sleep(8)   # stagger submissions; don't open the Google
+                            # endpoint with every job at the same instant
 
 
 if __name__ == "__main__":
