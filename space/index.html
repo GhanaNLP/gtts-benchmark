@@ -238,7 +238,7 @@ function renderGlobal() {
     !q || v.toLowerCase().includes(q) || v.toLowerCase().includes(q));
   rows.sort((a,b) => (DATA.voice_avg_cer[a[0]] ?? 1e9) - (DATA.voice_avg_cer[b[0]] ?? 1e9));
   const thead = `<tr><th>#</th><th>Voice</th><th class="num">Mean CER</th>
-    <th>${LANGS.map(([iso]) => `<span title="${iso}">${short(iso)}</span>`).join("</th><th>")}</th><th>Demo</th></tr>` +
+    <th>${LANGS.map(([iso, name]) => `<span title="${iso}">${name}</span>`).join("</th><th>")}</th><th>Demo</th></tr>` +
     `<tr class="cell-note"><td></td><td></td><td></td>
      <td colspan="${LANGS.length}">per-language CER</td><td></td></tr>`;
   const tbody = rows.map(([v, row], i) => {
@@ -246,7 +246,7 @@ function renderGlobal() {
     const bestCell = LANGS.map(([iso, name]) => ({iso, name, cer: row[iso]}))
       .filter(c => c.cer != null)
       .sort((a,b) => a.cer - b.cer)[0];
-    const demo = bestCell ? `${bestCell.iso} <span class="small">(${bestCell.cer.toFixed(2)})</span> ${audioTag(bestCell.iso, v)}` : `<span class="small">—</span>`;
+    const demo = bestCell ? `${LANG_NAME[bestCell.iso]} <span class="small">(${bestCell.cer.toFixed(2)})</span> ${audioTag(bestCell.iso, v)}` : `<span class="small">—</span>`;
     return `<tr class="rowlink" onclick="openVoice('${v}')">
       <td>${i+1}</td>
       <td><b class="mono">${h(v)}</b></td>
@@ -263,8 +263,7 @@ function renderGlobal() {
 }
 
 function short(iso) {
-  return iso.replace("twi_", "tw-").replace("akuapem","aku").replace("asante","asa")
-            .replace("_", "");
+  return LANG_NAME[iso] || iso;
 }
 
 // ── Tab 2: Per-language ────────────────────────────────────────────────────
@@ -301,7 +300,7 @@ function renderMatrix() {
   const voices = DATA.voices.slice().sort(
     (a,b) => (DATA.voice_avg_cer[a] ?? 1e9) - (DATA.voice_avg_cer[b] ?? 1e9));
   const head = `<th>Voice</th><th class="num">Mean</th>
-    ${isos.map(i => `<th class="num" title="${LANG_NAME[i]}">${short(i)}</th>`).join("")}`;
+    ${isos.map(i => `<th class="num" title="${LANG_NAME[i]}">${LANG_NAME[i] || i}</th>`).join("")}`;
   const body = voices.map(v => {
     const avg = DATA.voice_avg_cer[v];
     const cells = isos.map(iso => {
