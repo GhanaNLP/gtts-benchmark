@@ -480,8 +480,14 @@ def _write_matrix(voice_iso):
 # ── Language-level orchestrators (used by HF Job containers) ────────────────
 
 
-def synthesize_language(iso, force=False, concurrency=CONCURRENCY, limit=None):
-    """Synthesise every voice for *iso*. Returns (written, failed) totals."""
+def synthesize_language(iso, force=False, concurrency=CONCURRENCY, limit=None,
+                        on_cell=None):
+    """Synthesise every voice for *iso*. Returns (written, failed) totals.
+
+    ``on_cell(voice, written, failed)`` is invoked after each voice so a
+    caller (HF Job) can push progress incrementally instead of waiting for
+    the full language to finish.
+    """
     from .normalize import UniversalConverter
 
     converter = UniversalConverter()
@@ -495,6 +501,11 @@ def synthesize_language(iso, force=False, concurrency=CONCURRENCY, limit=None):
             ))
             total_w += w
             total_f += f
+            if on_cell is not None:
+                try:
+                    on_cell(voice, w, f)
+                except Exception as e:
+                    print(f"  on_cell failed for {voice}: {e}")
         except Exception as e:
             print(f"  ERROR synth {voice}->{iso}: {e}")
             total_f += 1

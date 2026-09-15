@@ -63,20 +63,20 @@ def _pull(api, patterns, dest):
         print(f"  nothing to resume ({type(e).__name__}: {str(e)[:120]})")
 
 
-def _push(api, folder, path_in_repo, message, attempts=5, base_delay=30.0):
-    """Push a folder to the audio dataset repo, retrying HF-side 429s.
+def _retry_upload(api, folder_path, path_in_repo, message,
+                  attempts=5, base_delay=30.0):
+    """Upload a folder to the audio dataset repo, retrying HF-side 429s.
 
     All jobs push to the same dataset repo, so uploads can collide in HF's
     per-repo commit/concurrency queue.  Back off and retry instead of
-    dropping the whole job.
+    dropping the work.
     """
-    if not any(Path(folder).rglob("*")):
-        return
+    import time
     last = None
     for attempt in range(attempts):
         try:
             api.upload_folder(
-                folder_path=str(folder),
+                folder_path=str(folder_path),
                 path_in_repo=path_in_repo,
                 repo_id=AUDIO_REPO,
                 repo_type="dataset",
@@ -91,6 +91,15 @@ def _push(api, folder, path_in_repo, message, attempts=5, base_delay=30.0):
                   f"{delay:.0f}s")
             time.sleep(delay)
     raise last
+
+
+def _push(api, folder, path_in_repo, message, attempts=5, base_delay=30.0):
+    """Back-compat wrapper around _retry_upload (skips empty folders)."""
+    if not any(Path(folder).rglob("*")):
+        return
+    _retry_upload(api, folder_path=str(folder),
+                  path_in_repo=path_in_repo, message=message,
+                  attempts=attempts, base_delay=base_delay)
 
 
 def main():
@@ -113,8 +122,20 @@ def main():
 
     if args.stage == "synth":
         _pull(api, [f"audio/{args.lang}/*"], WORK)
+
+        def _push_cell(voice, written, failed):
+            push_cell_dir = audio_dir / args.lang / voice
+            if not any(Path(push_cell_dir).rglob("*")):
+                return
+            _retry_upload(
+                api,
+                folder_path=str(push_cell_dir),
+                path_in_repo=f"audio/{args.lang}/{voice}",
+                message=(f"Synthesis: {args.lang}/{voice} "
+                         f"({written} ok, {failed} failed)"))
+
         w, f = synthesize_language(args.lang, force=args.force,
-                                   concurrency=conc)
+                                   concurrency=conc, on_cell=_push_cell)
         _push(api, audio_dir, "audio",
               f"Synthesis: {args.lang} ({w} ok, {f} failed)")
         return
